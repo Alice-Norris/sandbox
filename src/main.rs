@@ -9,7 +9,9 @@ fn main() {
         output: None
     };
     data.exec(&mut calc);
-
+    println!("{}", calc.write_string());
+    calc.func = plus;
+    data.exec(&mut calc);
     println!("{}", calc.write_string());
 }
 
@@ -46,14 +48,18 @@ impl Calculator {
     }
 
     fn write_string(&self) -> String{
+        
         format!("{} * {} = {}", self.first_op.unwrap(), self.secnd_op.unwrap(), self.output.unwrap())
     }
 }
 
 fn multiply(first_op: i32, secnd_op: i32) -> Option<i32> {
-        Some(first_op * secnd_op)
+    Some(first_op * secnd_op)
 }
 
+fn plus(first_op: i32, secnd_op: i32) -> Option<i32> {
+    Some(first_op + secnd_op)
+}
 // fn splash() {
 //     let mut sis = cursive::default();
 
