@@ -2,13 +2,13 @@ use cursive::views::TextView;
 
 fn main() {
     let data = TwoNumbers{ a: 0, b: 12};
-    let calc = Calculator{ 
+    let mut calc = Calculator{ 
         first_op: None,
         secnd_op: None,
         func: multiply,
         output: None
     };
-    data.exec(&calc);
+    data.exec(&mut calc);
 
     println!("{}", calc.write_string());
 }
@@ -18,15 +18,15 @@ struct TwoNumbers {
     b: i32,
 }
 impl TwoNumbers {
-    pub fn exec(&self, calc: &Calculator) {
-        (calc.func)(Some(8), Some(8));
+    pub fn exec(&self, calc: &mut Calculator) {
+        calc.calculate(self.a, self.b);
     }
 }
 
 struct Calculator {
     first_op: Option<i32>,
     secnd_op: Option<i32>,
-    func: fn(Option<i32>, Option<i32>) -> Option<i32>,
+    func: fn(i32, i32) -> Option<i32>,
     output: Option<i32>
 }
 impl Calculator {
@@ -39,8 +39,10 @@ impl Calculator {
         self.secnd_op = Some(num)
     }
 
-    fn calculate(&mut self) {
-        self.output = (self.func)(self.first_op, self.secnd_op)
+    fn calculate(&mut self, first_op: i32, secnd_op: i32) {
+        self.first_op = Some(first_op);
+        self.secnd_op = Some(secnd_op);
+        self.output = (self.func)(first_op, secnd_op)
     }
 
     fn write_string(&self) -> String{
@@ -48,12 +50,8 @@ impl Calculator {
     }
 }
 
-fn multiply(first_op: Option<i32>, secnd_op: Option<i32>) -> Option<i32> {
-    if first_op.is_some() & secnd_op.is_some() {
-        Some(first_op.unwrap() * secnd_op.unwrap())
-    } else {
-        return None
-    }
+fn multiply(first_op: i32, secnd_op: i32) -> Option<i32> {
+        Some(first_op * secnd_op)
 }
 
 // fn splash() {
